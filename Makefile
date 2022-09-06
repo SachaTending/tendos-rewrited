@@ -3,6 +3,7 @@ LINKDIR = tmp
 CCFLAGS = -std=gnu99 -ffreestanding -O2 -w -nostdlib -fno-exceptions -c -I include
 LDOPTS := -Tlink.ld -build-id=none -b pei-i386
 OUT_FILES = $(LINKDIR)/kernel/loader.o $(LINKDIR)/kernel/kmain.c.o
+GCC := gcc
 
 ifeq ($(OS),Windows_NT) 
 	include Makefile.win-nt
@@ -24,7 +25,7 @@ build: loader $(FILES)
 
 $(FILES):
 	@echo CC $@ to $(LINKDIR)/$@.o
-	@gcc $(CCFLAGS) $@ -o $(LINKDIR)/$@.o
+	@$(GCC) $(CCFLAGS) $@ -o $(LINKDIR)/$@.o
 
 loader:
 	@echo NASM kernel/loader.asm to $(LINKDIR)/kernel/loader.o
