@@ -1,0 +1,6 @@
+LDOPTS += -o tmp\preelf.o
+
+link:
+	@make -j4 build
+	@ld $(LDOPTS) $(OUT_FILES)
+	@objcopy -O elf32-i386 $(LINKDIR)/preelf.o out.kern

@@ -1,0 +1,5 @@
+LDOPTS += -o out.kern
+
+link:
+	@make -j4 build
+	@ld $(LDOPTS) $(OUT_FILES)
