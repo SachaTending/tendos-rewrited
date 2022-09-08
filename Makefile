@@ -1,9 +1,8 @@
 FILES = "kernel/kmain.c"
 LINKDIR = tmp
-CCFLAGS = -std=gnu99 -ffreestanding -O2 -w -nostdlib -fno-exceptions -c -I include
+CCFLAGS = -std=gnu99 -ffreestanding -O2 -nostdlib -fno-exceptions -c -I include -g -w
 LDOPTS := -Tlink.ld -build-id=none -b pei-i386
 OUT_FILES = $(LINKDIR)/kernel/loader.o $(LINKDIR)/kernel/kmain.c.o
-GCC := gcc
 
 ifeq ($(OS),Windows_NT) 
 	include Makefile.win-nt
@@ -25,11 +24,13 @@ build: loader $(FILES)
 
 $(FILES):
 	@echo CC $@ to $(LINKDIR)/$@.o
-	@$(GCC) $(CCFLAGS) $@ -o $(LINKDIR)/$@.o
+	@gcc $(CCFLAGS) $@ -o $(LINKDIR)/$@.o
 
 loader:
 	@echo NASM kernel/loader.asm to $(LINKDIR)/kernel/loader.o
 	@nasm -felf32 kernel/loader.asm -o $(LINKDIR)/kernel/loader.o
+	@echo NASM common/interrupts2.s to $(LINKDIR)/common/interrupts2.o
+	@nasm -felf32 common/interrupts2.s -o $(LINKDIR)/common/interrupts2.o
 
 run:
 	@qemu-system-i386 -kernel out.kern -m 2m -serial stdio -d guest_errors -d page -d cpu_reset -d strace -soundhw pcspk
