@@ -9,11 +9,12 @@ on:
 jobs:
   build:
 
-    runs-on: archlinux-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
-    
+    - name: Install Archlinux
+      run: curl -L https://github.com/zaoqi/github-actions-archlinux/raw/master/install.sh | sh
     - uses: ilammy/setup-nasm@v1
     - name: Compile
       run: make
