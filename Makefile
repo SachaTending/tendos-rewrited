@@ -1,7 +1,7 @@
 FILES = "kernel/kmain.c"
 LINKDIR = tmp
 CCFLAGS = -ffreestanding -O2 -nostdlib -fno-exceptions -c -I include -g -w -m32
-LDOPTS := -Tlink.ld -build-id=none -b elf32-i386
+LDOPTS := -Tlink.ld -build-id=none -b elf32-i386 -m elf_i386
 OUT_FILES = $(LINKDIR)/kernel/loader.o $(LINKDIR)/kernel/kmain.c.o $(LINKDIR)/common/asmpart.o
 
 include Makefile.unix
