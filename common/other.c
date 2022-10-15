@@ -7,6 +7,7 @@ void draw(multiboot_info_t *mbi)
   if (CHECK_FLAG (mbi->flags, 12))
     {
       logln("We can draw!");
+      return;
       multiboot_uint32_t color;
       unsigned i;
       void *fb = (void *) (unsigned long) mbi->framebuffer_addr;
