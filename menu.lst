@@ -1,0 +1,2 @@
+kernel (hd1,0)/out.kern sus
+module (hd1,0)/testmodule.tar

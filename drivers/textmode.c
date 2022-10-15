@@ -2,6 +2,10 @@
 #define VGA_DATA_REGISTER 0x3d5
 #define VGA_OFFSET_LOW 0x0f
 #define VGA_OFFSET_HIGH 0x0e
+#include <stdint.h>
+
+// #define PUT(c, offest) ( ((unsigned short *) (VIDEO_ADDRESS)) \
+//    [offest] = (WHITE_ON_BLACK << 8) | (c))
 
 void set_cursor(int offset) {
     offset /= 2;
@@ -22,13 +26,26 @@ int get_cursor() {
 #define VIDEO_ADDRESS 0xb8000
 #define MAX_ROWS 25
 #define MAX_COLS 80
-#define WHITE_ON_BLACK 0x0f
 
-void set_char_at_video_memory(char character, int offset, char color) {
+int c2 = 0x0f;
+
+void print_set_color(uint8_t foreground, uint8_t background) {
+    c2 = foreground + (background << 4);
+}
+
+void PUT(c, offest) {
+    char *vidmem = (unsigned char *) VIDEO_ADDRESS;
+    vidmem[offest] = (c << 8) | (c2);
+}
+void set_char_at_video_memory(unsigned char character, int offset, char color) {
     unsigned char *vidmem = (unsigned char *) VIDEO_ADDRESS;
     vidmem[offset] = character;
     vidmem[offset + 1] = color;
 }
+
+#define color2
+
+#ifndef color2
 
 void print_string(char *string) {
     int offset = get_cursor();
@@ -40,7 +57,8 @@ void print_string(char *string) {
         if (string[i] == '\n') {
             offset = move_offset_to_new_line(offset);
         } else {
-            set_char_at_video_memory(string[i], offset, WHITE_ON_BLACK);
+            // set_char_at_video_memory(string[i], offset, WHITE_ON_BLACK);
+            PUT(string[i], offset);
             offset += 2;
         }
         i++;
@@ -48,7 +66,9 @@ void print_string(char *string) {
     set_cursor(offset);
 }
 
-void printc_string(char color, char *string) {
+#endif
+
+void printc_string(char color, unsigned char *string) {
     int offset = get_cursor();
     int i = 0;
     while (string[i] != 0) {
@@ -59,12 +79,22 @@ void printc_string(char color, char *string) {
             offset = move_offset_to_new_line(offset);
         } else {
             set_char_at_video_memory(string[i], offset, color);
+            // PUT(int string[i], offest)
             offset += 2;
         }
         i++;
     }
     set_cursor(offset);
 }
+
+#ifndef print_string
+
+void print_string(unsigned char *string)
+{
+    printc_string(c2, string);
+}
+
+#endif
 
 int get_row_from_offset(int offset) {
     return offset / (2 * MAX_COLS);
@@ -93,7 +123,7 @@ int scroll_ln(int offset) {
     );
 
     for (int col = 0; col < MAX_COLS; col++) {
-        set_char_at_video_memory(' ', get_offset(col, MAX_ROWS - 1), WHITE_ON_BLACK);
+        set_char_at_video_memory(' ', get_offset(col, MAX_ROWS - 1), c2);
     }
 
     return offset - 2 * MAX_COLS;
@@ -101,7 +131,7 @@ int scroll_ln(int offset) {
 
 void clear_screen_vga() {
     for (int i = 0; i < MAX_COLS * MAX_ROWS; ++i) {
-        set_char_at_video_memory(' ', i * 2, WHITE_ON_BLACK);
+        set_char_at_video_memory(' ', i * 2, c2);
     }
     set_cursor(get_offset(0, 0));
 }

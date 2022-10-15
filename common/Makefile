@@ -1,3 +1,2 @@
-FILES += "common/inlineasm.c" "common/pic.c" "common/interrupts.c"
-OUT_FILES += $(LINKDIR)/common/*.c.o $(LINKDIR)/common/interrupts2.o
-
+FILES += "common/inlineasm.c" "common/interrupts.c" "common/tar.c" "common/ata.c" "common/malloc.c" "common/other.c"
+OUT_FILES += $(LINKDIR)/common/inlineasm.c.o $(LINKDIR)/common/interrupts.c.o $(LINKDIR)/common/interrupts2.o $(LINKDIR)/common/tar.c.o $(LINKDIR)/common/ata.c.o $(LINKDIR)/common/malloc.c.o $(LINKDIR)/common/other.c.o

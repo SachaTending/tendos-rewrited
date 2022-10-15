@@ -53,7 +53,7 @@ _start:
    ; To set up a stack, we set the esp register to point to the top of our
    ; stack (as it grows downwards on x86 systems). This is necessarily done
    ; in assembly as languages such as C cannot function without a stack.
-   mov esp, stack_top
+   push   ebx
  
    ; This is a good place to initialize crucial processor state before the
    ; high-level kernel is entered. It's best to minimize the early
@@ -71,8 +71,8 @@ _start:
    ; stack since (pushed 0 bytes so far) and the alignment is thus
    ; preserved and the call is well defined.
         ; note, that if you are building on Windows, C functions may have "_" prefix in assembly: _kernel_main
-   extern _kmain
-   call _kmain
+   extern kmain
+   call kmain
  
    ; If the system has nothing more to do, put the computer into an
    ; infinite loop. To do that:

@@ -1,4 +1,4 @@
-LDOPTS += -o tmp\preelf.o
+LDOPTS += -o $(LINKDIR)/preelf.o -b pei-i386
 
 link:
 	@make -j4 build
