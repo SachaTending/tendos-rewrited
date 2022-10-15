@@ -16,7 +16,7 @@ jobs:
     - name: Install Archlinux
       run: curl -L https://github.com/zaoqi/github-actions-archlinux/raw/master/install.sh | sh
     - name: Install gcc
-      run: sudo pacman --no-confirm -Sy gcc
+      run: sudo pacman --noconfirm -Sy gcc
     - uses: ilammy/setup-nasm@v1
     - name: Compile
       run: make
